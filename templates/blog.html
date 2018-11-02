@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+   
+{% block content %}
+
+        <ul>
+            {% for posts in blog %}
+            <li>{{blog.title}}
+                <form method="POST" style="display:inline-block;">
+                    <input type="hidden" name="post-id" value="{{post.id}}" />
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+
+    <hr />
+
+    <h2>Entries</h2>
+
+    <ul>
+        {% for posts in blog %}
+        <li>{{blog.title}}</li>
+        <li>{{blog.body}}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
