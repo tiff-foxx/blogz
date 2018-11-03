@@ -12,7 +12,9 @@
 
     <ul>
         {% for blog in entries %}
+        <a href='/individual?id={{blog.id}}'>
         <h2>{{blog.title}}</h2>
+        </a>
         <h3>{{blog.body}}</h3>
         <hr />
         {% endfor %}
