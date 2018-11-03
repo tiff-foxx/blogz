@@ -53,9 +53,10 @@ def new_post():
 
 @app.route("/individual")
 def individual_blog():
-    request.args.get('id')
-    request.args.get('blog_body')
-    return render_template('individual.html',title='123TESTING')
+    blog_id = request.args.get('id')
+    # return blog_id
+    entries = Blog.query.filter_by(id=blog_id).all()
+    return render_template('individual.html',title='123TESTING',entries=entries)
     
     #username = request.form['username']
     #template = jinja_env.get_template('valid_signup.html')
