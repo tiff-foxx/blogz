@@ -8,9 +8,10 @@
             <input type="text" name='title' />
         </label>
         <label>
-            Blog Text:
+            Blog Body:
             <input type="textarea" name='body' />
         </label>
+        <p class="error">{{empty_error}}</p>
         <input type="submit" value='Add Entry' action= '/blog'/>
  
     </form>

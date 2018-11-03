@@ -51,16 +51,26 @@ def index():
 #         tasks=tasks, completed_tasks=completed_tasks)
 
 @app.route('/newpost', methods = ['GET','POST'])
-def new_post():
 
+
+
+
+
+def new_post():
     if request.method == 'POST':
         blog_title = request.form['title']
         blog_body = request.form['body']
-        new_entry = Blog(blog_title, blog_body)
-        db.session.add(new_entry)
-        db.session.commit()
-        entries = Blog.query.filter_by(submitted=True).all()
-        return render_template('blog.html',title="Build-A-Blog",entries=entries)
+        empty_error = ''
+        if len(blog_title)<= 0 or len(blog_body)<=0:
+            empty_error = 'Title and Body fields required'
+            return render_template('newpost.html',title='TESTING',empty_error=empty_error,blog_title=blog_title,blog_body=blog_body)
+            
+        else: 
+            new_entry = Blog(blog_title, blog_body)
+            db.session.add(new_entry)
+            db.session.commit()
+            entries = Blog.query.filter_by(submitted=True).all()
+            return render_template('blog.html',title="Build-A-Blog",entries=entries)
 
     return render_template('newpost.html',title="New Post")
     # entries = Blog.query.filter_by(submitted=True).all()
