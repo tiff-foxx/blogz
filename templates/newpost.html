@@ -5,13 +5,14 @@
     <form method='POST'>
         <label>
             Blog Title:
-            <input type="text" name='title' />
+            <input type="text" name='title' value='{{blog_title}}'/>
+            <p class="error">{{title_error}}</p>
         </label>
         <label>
             Blog Body:
-            <input type="textarea" name='body' />
+            <input type="textarea" name='body' value='{{blog_body}}'/>
         </label>
-        <p class="error">{{empty_error}}</p>
+        <p class="error">{{body_error}}</p>
         <input type="submit" value='Add Entry' action= '/blog'/>
  
     </form>
