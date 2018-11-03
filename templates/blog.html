@@ -12,8 +12,9 @@
 
     <ul>
         {% for blog in entries %}
-        <li>{{blog.title}}</li>
-        <li>{{blog.body}}</li>
+        <h2>{{blog.title}}</h2>
+        <h3>{{blog.body}}</h3>
+        <hr />
         {% endfor %}
     </ul>
 
