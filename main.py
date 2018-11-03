@@ -28,8 +28,8 @@ def index():
         blog_title = request.form['title']
         blog_body = request.form['body']
         new_entry = Blog(blog_title, blog_body)
-        db.session.add(new_entry)
-        db.session.commit()
+        # db.session.add(new_entry)
+        #  db.session.commit()
 
     entries = Blog.query.filter_by(submitted=True).all()
     return render_template('blog.html',title="Build-A-Blog")
@@ -58,7 +58,14 @@ def new_post():
         new_entry = Blog(blog_title, blog_body)
         db.session.add(new_entry)
         db.session.commit()
+        return render_template('blog.html',title="Build-A-Blog")
+
     return render_template('newpost.html',title="New Post")
+    # entries = Blog.query.filter_by(submitted=True).all()
+    # return render_template('blog.html',title="Build-A-Blog")
+
+
+
 
 #    entries = Blog.query.filter_by(submitted=True).all()
 #    return render_template('main_blog_pg.html',title="Build-A-Blog")
