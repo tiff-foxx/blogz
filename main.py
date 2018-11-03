@@ -6,7 +6,7 @@ app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://build-a-blog:aplus@localhost:8889/build-a-blog'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
-app.secret_key = '1234zyxw'
+# app.secret_key = '1234zyxw'
 
 
 class Blog(db.Model):
@@ -21,7 +21,7 @@ class Blog(db.Model):
         self.body = body
         self.submitted = True
 
-@app.route('/blog', methods=['POST', 'GET'])
+@app.route('/blog', methods=['GET','POST'])
 def index():
 
     if request.method == 'POST':
@@ -29,10 +29,11 @@ def index():
         blog_body = request.form['body']
         new_entry = Blog(blog_title, blog_body)
         # db.session.add(new_entry)
-        #  db.session.commit()
+        # db.session.commit()
+        
 
     entries = Blog.query.filter_by(submitted=True).all()
-    return render_template('blog.html',title="Build-A-Blog")
+    return render_template('blog.html',title="Build-A-Blog",entries=entries)
 
 
 # @app.route('/', methods=['POST', 'GET'])
@@ -58,7 +59,8 @@ def new_post():
         new_entry = Blog(blog_title, blog_body)
         db.session.add(new_entry)
         db.session.commit()
-        return render_template('blog.html',title="Build-A-Blog")
+        entries = Blog.query.filter_by(submitted=True).all()
+        return render_template('blog.html',title="Build-A-Blog",entries=entries)
 
     return render_template('newpost.html',title="New Post")
     # entries = Blog.query.filter_by(submitted=True).all()
