@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://build-a-blog:aplus@localhost:8889/build-a-blog'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:Done530@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 # app.secret_key = '1234zyxw'
@@ -16,11 +16,27 @@ class Blog(db.Model):
     title = db.Column(db.String(120))
     body = db.Column(db.String(500))
     submitted = db.Column(db.Boolean)
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def __init__(self, title, body):
+    def __init__(self, title, body, owner):
         self.title = title
         self.body = body
         self.submitted = True
+        self.owner = owner
+
+class User(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), unique=True)
+    password = db.Column(db.String(120))
+    blogs = db.relationship('Blog', backref='owner')
+
+    def __init__(self, username, password):
+        self.email = email
+        self.username = username
+        self.password = password
+
+
 
 @app.route('/blog', methods=['GET','POST'])
 def index():
@@ -49,11 +65,9 @@ def new_post():
             body_error = 'Please enter body'
 
         if not title_error and not body_error:
-            new_entry = Blog(blog_title, blog_body)
+            new_entry = Blog(blog_title, blog_body, owner)
             db.session.add(new_entry)
             db.session.commit()
-            # entries = Blog.query.filter_by(submitted=True).all()
-            # return render_template('blog.html',title="Build-A-Blog",entries=entries)
             entries = Blog.query.filter_by(id=new_entry.id).all()
             return render_template('individual.html',title='latest_entry',entries=entries)
         else:
@@ -62,35 +76,13 @@ def new_post():
     return render_template('newpost.html',title="New Post")
 
 
-        # if len(blog_title)<= 0 or len(blog_body)<=0:
-        #     empty_error = 'Title and Body fields required'
-        #     return render_template('newpost.html',title='TESTING',empty_error=empty_error,blog_title=blog_title,blog_body=blog_body)
-            
-        # else: 
-        #     new_entry = Blog(blog_title, blog_body)
-        #     db.session.add(new_entry)
-        #     db.session.commit()
-        #     # entries = Blog.query.filter_by(submitted=True).all()
-        #     # return render_template('blog.html',title="Build-A-Blog",entries=entries)
-        #     entries = Blog.query.filter_by(id=new_entry.id).all()
-        #     return render_template('individual.html',title='latest_entry',entries=entries)
-
 
 @app.route("/individual")
 def individual_blog():
     blog_id = request.args.get('id')
-    # return blog_id
     entries = Blog.query.filter_by(id=blog_id).all()
     return render_template('individual.html',title='123TESTING',entries=entries)
-    
-    #username = request.form['username']
-    #template = jinja_env.get_template('valid_signup.html')
-    #return template.render(name = username) -->
-
-    # entries = Blog.query.filter_by(submitted=True).all()
-    # return render_template('blog.html',title="Build-A-Blog")
 
 if __name__ == '__main__':
     app.run()
 
-    # return redirect '/individual'
