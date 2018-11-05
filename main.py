@@ -35,9 +35,19 @@ class User(db.Model):
         self.username = username
         self.password = password
 
+@app.before_request
+def require_login():
+    allowed_routes = ['login', 'blog', 'index_2', 'signup']
+    if request.endpoint not in allowed_routes and 'username' not in session:
+        return redirect('/login')
+    # if request.endpoint in allowed_routes and 'username' not in session:
+    #     entries = Blog.query.filter_by(submitted=True).all()
+    #     # return render_template('login.html',title='Told Ya',entries=entries)
+    #     return render_template(("'" + request.endpoint + ".html'"),title='Told Ya',entries=entries)
+    
 
 @app.route('/blog', methods=['GET','POST'])
-def index():
+def blog_page():
 
     if request.method == 'POST':
         blog_title = request.form['title']
@@ -50,6 +60,8 @@ def index():
 
 @app.route('/newpost', methods = ['GET','POST'])
 def new_post():
+
+    owner = User.query.filter_by(username=session['username']).first()
     
     if request.method == 'POST':
         blog_title = request.form['title']
@@ -64,7 +76,7 @@ def new_post():
             body_error = 'Please enter body'
 
         if not title_error and not body_error:
-            new_entry = Blog(blog_title, blog_body)
+            new_entry = Blog(blog_title, blog_body, owner)
             db.session.add(new_entry)
             db.session.commit()
             entries = Blog.query.filter_by(id=new_entry.id).all()
@@ -155,6 +167,14 @@ def signup():
     else:
         return render_template('signup.html',title="Blogz Signup")
 
+@app.route('/logout')
+def logout(): 
+    session.clear()
+    return redirect('/blog')
+
+@app.route('/')
+def index():
+    return redirect('/index')
 
 
 if __name__ == '__main__':
