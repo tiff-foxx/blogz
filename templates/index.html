@@ -12,7 +12,9 @@
 
     <ul>
         {% for name in users %}
+        <a href='/user_id_page?user={{name.id}}'>
         <h2>{{name.username}}</h2>
+        </a>
         <hr />
         {% endfor %}
     </ul>

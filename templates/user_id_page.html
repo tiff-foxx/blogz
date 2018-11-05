@@ -1,0 +1,26 @@
+<!-- title  -->
+
+<!-- all of that persons blog posts w/ hyperlink on blog title -->
+<!-- writen by w/ hyperlink on name -->
+
+{% extends "base.html" %}
+   
+{% block content %}
+
+    <h2>User's Specific Blog Page</h2>
+
+    <ul>
+        {% for blog in entries %}
+        <a href='/individual?id={{blog.id}}'>
+        <h2>{{blog.title}}</h2>
+        </a>
+        <h3>{{blog.body}}</h3>
+        <hr />
+        {% endfor %}
+
+        <a href='/user_id_page?id={{userID}}'>
+        <h6>working?</h6>
+        </a>
+    </ul>
+
+{% endblock %}

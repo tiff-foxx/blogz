@@ -45,11 +45,13 @@ def require_login():
 @app.route('/blog', methods=['GET','POST'])
 def blog_page():
 
+
+    
     if request.method == 'POST':
         blog_title = request.form['title']
         blog_body = request.form['body']
         new_entry = Blog(blog_title, blog_body)
-      
+
     entries = Blog.query.filter_by(submitted=True).all()
     return render_template('blog.html',title="Build-A-Blog",entries=entries)
 
@@ -170,6 +172,15 @@ def logout():
 def index():   
     users = User.query.filter_by(username= User.username).all()
     return render_template('index.html',title="Home_All Users",users=users)
+
+@app.route('/user_id_page')
+def user_id_page():
+    
+    if request.method == 'GET':
+        user_id = request.args.get('user')
+        entries = Blog.query.filter_by(owner_id=user_id).all()
+        return render_template('blog.html',title='HotDog',entries=entries)
+        # return render_template('user_id_page',title='HotDog',users=users,entries=entries)
 
 
 if __name__ == '__main__':

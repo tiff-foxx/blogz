@@ -8,6 +8,8 @@
     {% for blog in entries %}
     <h2>{{blog.title}}</h2>
     <h3>{{blog.body}}</h3>
+    <a href='/user_id_page?user={{blog.owner.id}}'>
+    <h6>Written By: {{blog.owner.username}}</h6>
     {% endfor %}
 
 {% endblock %}
