@@ -67,8 +67,6 @@ def new_post():
             new_entry = Blog(blog_title, blog_body)
             db.session.add(new_entry)
             db.session.commit()
-            # entries = Blog.query.filter_by(submitted=True).all()
-            # return render_template('blog.html',title="Build-A-Blog",entries=entries)
             entries = Blog.query.filter_by(id=new_entry.id).all()
             return render_template('individual.html',title='latest_entry',entries=entries)
         else:
@@ -154,12 +152,8 @@ def signup():
             session['username'] = username
             flash('Welcome')
             return redirect ('/newpost')
-        # else:
-        #     return render_template('signup.html',title="Try Again")
     else:
         return render_template('signup.html',title="Blogz Signup")
-
-
 
 
 
