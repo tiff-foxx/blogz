@@ -86,10 +86,6 @@ def individual_blog():
 
 
 
-
-
-
-
 @app.route('/login',methods=['GET','POST'])
 def login():
     if request.method == 'POST':
@@ -102,22 +98,16 @@ def login():
             flash('Logged in')
             return redirect ('/newpost')
 
-        if user.password != password:
+        if user and user.password != password:
             flash('Password incorrect')
-            return redirect ('/login')
+            return render_template('login.html',title='OHOHO')
 
-        if user.username != username:
+        if user not in User.query.filter_by(username=username).all():
             flash('Username does not exist')
-            return redirect ('/login')
-
+            return render_template('login.html',title="HAHAHA")
+        
     return render_template('login.html',title="Login Page")
     
-# def is_blank(variable):
-#     try:
-#         len(variable) == 0
-#         return True
-#     except:
-#         return False
 
 
 @app.route('/signup', methods = ['GET', 'POST'])
