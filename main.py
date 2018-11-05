@@ -37,14 +37,10 @@ class User(db.Model):
 
 @app.before_request
 def require_login():
-    allowed_routes = ['login', 'blog', 'index_2', 'signup']
+    allowed_routes = ['login', 'blog_page', 'index', 'signup']
     if request.endpoint not in allowed_routes and 'username' not in session:
+        # flash(request.endpoint)
         return redirect('/login')
-    # if request.endpoint in allowed_routes and 'username' not in session:
-    #     entries = Blog.query.filter_by(submitted=True).all()
-    #     # return render_template('login.html',title='Told Ya',entries=entries)
-    #     return render_template(("'" + request.endpoint + ".html'"),title='Told Ya',entries=entries)
-    
 
 @app.route('/blog', methods=['GET','POST'])
 def blog_page():
@@ -92,8 +88,6 @@ def individual_blog():
     blog_id = request.args.get('id')
     entries = Blog.query.filter_by(id=blog_id).all()
     return render_template('individual.html',title='123TESTING',entries=entries)
-
-
 
 
 @app.route('/login',methods=['GET','POST'])
@@ -173,8 +167,9 @@ def logout():
     return redirect('/blog')
 
 @app.route('/')
-def index():
-    return redirect('/index')
+def index():   
+    users = User.query.filter_by(username= User.username).all()
+    return render_template('index.html',title="Home_All Users",users=users)
 
 
 if __name__ == '__main__':
